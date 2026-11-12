@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>LETRALIA – aventuras de lectura</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;800&display=swap">
+<style>
+:root{--sky:#A5BDE1;--ivory:#F7F6D7;--ink:#6E1E3B;--sun:#F9DD8A;--paper:#fff;--line:#6E1E3B;--on:#6E1E3B;--fs:22px}
+[data-theme=dark]{--ivory:#3F0F22;--paper:#5A1830;--ink:#F7F6D7;--line:#F7F6D7}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:'Rubik','Trebuchet MS',system-ui,sans-serif;background:var(--sky);color:var(--ink);display:flex;justify-content:center}
+#app{width:100%;max-width:430px;height:100%;background:var(--ivory);display:flex;flex-direction:column;overflow:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:4px solid var(--sky);outline-offset:2px}
+.scr{flex:1;overflow:auto;padding-bottom:14px}
+.top{padding:14px 18px 4px;display:flex;justify-content:space-between;align-items:center}
+h1,h2{margin:0;font-weight:800;line-height:1.1}h1{font-size:26px}h2{font-size:22px;padding:14px 18px 4px}
+.logo{font-size:44px;letter-spacing:3px}
+.sub{margin:4px 18px;font-size:17px}
+.tot{background:var(--sun);color:var(--on);border:3px solid var(--line);border-radius:999px;padding:2px 12px;font-weight:800}
+.chips{display:flex;gap:8px;padding:6px 18px;overflow-x:auto}
+.chip{border:3px solid var(--line);border-radius:999px;padding:1px 14px;font-weight:700;background:var(--paper);white-space:nowrap}
+.chip.on{background:var(--ink);color:var(--ivory)}
+.car{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 18px 18px;scroll-padding:0 18px}
+.card{flex:0 0 62%;scroll-snap-align:start;text-align:left;background:var(--paper);border:3px solid var(--line);border-left-width:14px;border-radius:6px 18px 18px 6px;box-shadow:0 6px 0 var(--line);padding:10px;display:flex;flex-direction:column;gap:4px;transition:transform .2s,box-shadow .2s}
+.card.sel{background:var(--sun);color:var(--on);transform:translateY(-6px) scale(1.03);box-shadow:0 12px 0 var(--line)}
+.cov{height:110px;border-radius:10px;display:grid;place-items:center;font-size:60px;color:#000}
+.card b{font-size:19px;line-height:1.1}.card small{font-size:14px}
+.bd{align-self:flex-start;font-weight:800;font-size:14px;border:2px solid var(--line);border-radius:999px;padding:0 10px;background:var(--sky);color:var(--on)}
+.bd.done{background:var(--sun)}
+.det{margin:0 18px;padding:10px 14px;background:var(--paper);border:3px dashed var(--line);border-radius:16px;font-size:16px}
+.go{display:block;margin:14px 18px 0;width:calc(100% - 36px);background:var(--sky);color:var(--on);border:3px solid var(--line);border-radius:16px;box-shadow:0 6px 0 var(--line);padding:10px;font-size:21px;font-weight:800}
+.go:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line)}
+.alt{background:var(--sun)}
+.bar{display:flex;align-items:center;gap:8px;padding:12px 18px}
+.x{min-width:44px;height:44px;border:3px solid var(--line);border-radius:50%;background:var(--paper);font-size:17px;font-weight:800;padding:0 6px}
+.dots{flex:1;display:flex;gap:6px}
+.dots i{flex:1;height:10px;border-radius:5px;background:var(--paper);border:2px solid var(--line)}
+.dots i.on{background:var(--sun)}
+.page{flex:1;margin:0 18px;background:var(--paper);border:3px solid var(--line);border-radius:18px;padding:16px;display:flex;flex-direction:column;align-items:center;gap:10px;overflow:auto}
+.ill{font-size:80px;line-height:1;text-align:center}
+.txt{font-size:var(--fs);line-height:1.45;margin:0}
+.w{border-radius:6px;padding:0 1px}.w.hl{background:var(--sun);color:var(--on)}
+.row{display:flex;gap:10px;padding:0 18px 10px}.row .go{margin:10px 0 0;flex:1;width:auto}
+.tag{align-self:flex-start;background:var(--sky);color:var(--on);border:2px solid var(--line);border-radius:999px;padding:0 12px;font-weight:700;font-size:15px}
+.q{font-size:22px;font-weight:700;line-height:1.25;margin:0;align-self:flex-start}
+.opt{width:100%;text-align:left;border:3px solid var(--line);border-radius:14px;padding:9px 14px;font-size:19px;font-weight:700;background:var(--paper);box-shadow:0 4px 0 var(--line);position:relative}
+.opt.ok{background:var(--sky);color:var(--on)}.opt.ok::before{content:'✓ '}
+.opt.no{background:var(--sun);color:var(--on);border-style:dashed}.opt.no::before{content:'↻ '}
+.opt.pk{background:var(--sky);color:var(--on)}
+.fb{min-height:48px;font-size:18px;font-weight:700;align-self:flex-start;margin:0}
+.big{font-size:50px;letter-spacing:4px}
+.res{align-self:stretch;text-align:left;font-size:16px;border-top:2px solid var(--line);padding-top:6px}
+.tabs{display:flex;border-top:3px solid var(--line);background:var(--paper)}
+.tabs button{flex:1;padding:6px 0;font-size:13px;font-weight:700;display:flex;flex-direction:column;align-items:center}
+.tabs button span{font-size:22px}.tabs .on{background:var(--sun);color:var(--on)}
+.hero{display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:center}
+.mini{margin:6px 18px;font-size:16px}
+.meter{height:14px;border:2px solid var(--line);border-radius:7px;background:var(--paper);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--sun)}
+.sw{display:flex;justify-content:space-between;align-items:center;margin:10px 18px;font-size:18px;font-weight:700}
+.sw button{border:3px solid var(--line);border-radius:999px;padding:2px 16px;background:var(--paper);font-weight:800}
+.sw button.on{background:var(--sun);color:var(--on)}
+.pop{animation:pop .5s}@keyframes pop{0%{transform:scale(.6)}70%{transform:scale(1.12)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main id="app" aria-live="polite"></main>
+<script>
+const AR={lit:'Comprensión literal',inf:'Comprensión inferencial',voc:'Vocabulario',sec:'Secuenciación'},LV={1:'6–7 años',2:'8–9 años',3:'10 años'};
+const S=[
+{id:'pato',t:'El patito que se perdió',e:'🦆',c:'#F9DD8A',lvl:1,cat:'Animales',min:2,
+ p:[{i:'🦆',x:'Pipo es un patito amarillo. Hoy salió a jugar con su mamá junto al río.'},
+    {i:'🦋',x:'Pipo vio una mariposa azul y corrió detrás de ella. Se alejó mucho del río.'},
+    {i:'🤗',x:'Pipo se asustó y gritó: cuac, cuac. Su mamá lo oyó, lo encontró y le dio un abrazo.'}],
+ q:[{k:'lit',q:'¿Detrás de qué corrió Pipo?',o:['Una rana','Una mariposa azul','Una pelota'],a:1,h:2,e:'El texto dice que corrió detrás de una mariposa azul.'},
+    {k:'voc',q:'¿Qué quiere decir “se alejó”?',o:['Se fue lejos','Se durmió','Se escondió en casa'],a:0,h:2,e:'Alejarse es irse lejos de un sitio.'},
+    {k:'sec',q:'Toca los hechos en el orden en que pasaron.',o:['Pipo juega con su mamá','Pipo corre tras la mariposa','Su mamá le da un abrazo'],h:1,e:'Primero juega, luego se pierde y al final lo encuentran.'}]},
+{id:'nube',t:'La nube tímida',e:'☁️',c:'#A5BDE1',lvl:1,cat:'Fantasía',min:2,
+ p:[{i:'☁️',x:'Nina era una nube pequeña. Le daba vergüenza llover delante de todos.'},
+    {i:'🌵',x:'Abajo, un cactus tenía mucha sed. Sus hojas se ponían tristes y flacas.'},
+    {i:'🌈',x:'Nina respiró hondo y soltó unas gotitas. El cactus floreció y apareció un arcoíris.'}],
+ q:[{k:'lit',q:'¿Qué le daba vergüenza a Nina?',o:['Volar','Llover','Cantar'],a:1,h:1,e:'La primera frase lo dice: llover delante de todos.'},
+    {k:'inf',q:'¿Por qué estaba triste el cactus?',o:['Tenía sed','Tenía frío','Estaba solo'],a:0,h:2,e:'El texto dice que tenía sed; es la pista.'},
+    {k:'voc',q:'¿Qué significa “floreció”?',o:['Se secó','Le salieron flores','Se movió'],a:1,h:3,e:'Florecer es llenarse de flores.'}]},
+{id:'faro',t:'El faro de Mateo',e:'🏝️',c:'#F7F6D7',lvl:2,cat:'Aventura',min:3,
+ p:[{i:'🏝️',x:'Mateo vivía en una isla con su abuela, que cuidaba el faro. Cada noche ella subía a encender la luz.'},
+    {i:'⛈️',x:'Una noche, una tormenta apagó la luz. La abuela se había torcido el tobillo y no podía subir las escaleras.'},
+    {i:'🔦',x:'Mateo tenía miedo a la oscuridad, pero tomó una linterna y subió. Con cuidado, volvió a encender el faro.'},
+    {i:'⛵',x:'Un barco pesquero vio la luz y llegó sano al puerto. Al amanecer, todo el pueblo aplaudió a Mateo.'}],
+ q:[{k:'inf',q:'¿Por qué no subió la abuela al faro?',o:['Estaba dormida','Se lastimó el tobillo','Tenía miedo'],a:1,h:2,e:'Se había torcido el tobillo, así que no podía subir.'},
+    {k:'voc',q:'Mateo fue valiente. Eso quiere decir que…',o:['No sintió miedo','Actuó aunque tenía miedo','Corrió rápido'],a:1,h:3,e:'Ser valiente es hacer algo difícil aunque se sienta miedo.'},
+    {k:'sec',q:'Ordena lo que pasó.',o:['Una tormenta apaga la luz','Mateo sube con la linterna','El barco llega al puerto'],h:2,e:'La tormenta causa el problema, Mateo lo resuelve y el barco se salva.'}]},
+{id:'mapa',t:'El mapa de la profesora Inés',e:'🗺️',c:'#A5BDE1',lvl:3,cat:'Misterio',min:4,
+ p:[{i:'📖',x:'La profesora Inés encontró un mapa antiguo dentro de un libro de la biblioteca. Una cruz roja marcaba un lugar junto a un olivo de tres troncos.'},
+    {i:'🌳',x:'Con sus alumnos recorrió el patio y halló el olivo. Cavaron con una pala pequeña y, a un palmo de profundidad, apareció una caja de hojalata.'},
+    {i:'📦',x:'Dentro había cartas de niños que estudiaron allí hacía cien años. Contaban sus sueños para el futuro. Inés sonrió y propuso escribir otras para guardarlas.'}],
+ q:[{k:'lit',q:'¿Dónde estaba el mapa?',o:['En un olivo','Dentro de un libro','En la caja de hojalata'],a:1,h:1,e:'Lo encontró dentro de un libro de la biblioteca.'},
+    {k:'inf',q:'¿Por qué Inés propuso escribir nuevas cartas?',o:['Para tirar las viejas','Para que otros niños las encuentren en el futuro','Porque se quedó sin papel'],a:1,h:3,e:'Las cartas antiguas la inspiraron a dejar un mensaje al futuro.'},
+    {k:'voc',q:'En el texto, “antiguo” significa…',o:['Muy viejo','Muy grande','Roto'],a:0,h:1,e:'Antiguo es algo que existe desde hace mucho tiempo.'},
+    {k:'sec',q:'Ordena la aventura.',o:['Inés encuentra el mapa','Cavan junto al olivo','Leen las cartas de la caja'],h:2,e:'Mapa, excavación y, al final, el hallazgo de las cartas.'}]}
+];
+let D={prog:{},ar:{},set:{fs:22,voz:1,dark:0}};
+try{D=Object.assign(D,JSON.parse(localStorage.getItem('lt')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('lt',JSON.stringify(D))}catch(e){}};
+let st={v:'home',f:0,c:'',sel:'pato',p:0,qi:0,ans:null,bad:[],ord:[],res:[],back:0};
+const A=document.getElementById('app'),cur=()=>S.find(s=>s.id==st.sel);
+const stars=n=>'★'.repeat(n)+'☆'.repeat(3-n),total=()=>Object.values(D.prog).reduce((a,b)=>a+b,0);
+function say(t){if(!D.set.voz)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';u.rate=.85;speechSynthesis.speak(u)}catch(e){}}
+function theme(){document.documentElement.dataset.theme=D.set.dark?'dark':'';document.documentElement.style.setProperty('--fs',D.set.fs+'px')}
+const tabs=()=>`<nav class="tabs">${[['home','🏠','Inicio'],['lib','📚','Cuentos'],['prog','⭐','Progreso'],['set','⚙️','Ajustes']].map(([v,i,n])=>`<button class="${st.v==v?'on':''}" data-a="go" data-v="${v}"><span>${i}</span>${n}</button>`).join('')}</nav>`;
+const bar=(n,i)=>`<div class="bar"><button class="x" data-a="go" data-v="lib" aria-label="Salir">✕</button><div class="dots">${Array.from({length:n},(_,k)=>`<i class="${k<=i?'on':''}"></i>`).join('')}</div>`;
+function render(){
+ const s=cur();let h='';
+ if(st.v=='home'){
+  h=`<div class="scr hero"><div class="ill pop" style="font-size:96px;margin-top:30px">🦉</div><h1 class="logo">LETRALIA</h1><p class="sub">Soy Lía. Lee las historias, resuelve las misiones y gana estrellas.</p><button class="go" data-a="go" data-v="lib">Comenzar aventura</button><p class="mini">⭐ ${total()} estrellas · ${Object.keys(D.prog).length} de ${S.length} cuentos</p></div>${tabs()}`;
+ }else if(st.v=='lib'){
+  const cats=['',...new Set(S.map(x=>x.cat))],list=S.filter(x=>(!st.f||x.lvl==st.f)&&(!st.c||x.cat==st.c));
+  if(list.length&&!list.find(x=>x.id==st.sel))st.sel=list[0].id;
+  const c=list.length?cur():null;
+  h=`<div class="scr"><div class="top"><div><h1>📚 Elige tu aventura</h1></div><span class="tot">⭐ ${total()}</span></div>
+  <div class="chips" role="group" aria-label="Dificultad">${[['Todas',0],['6–7 años',1],['8–9 años',2],['10 años',3]].map(([n,v])=>`<button class="chip ${st.f==v?'on':''}" data-a="f" data-v="${v}">${n}</button>`).join('')}</div>
+  <div class="chips" role="group" aria-label="Categoría">${cats.map(n=>`<button class="chip ${st.c==n?'on':''}" data-a="c" data-v="${n}">${n||'Todas'}</button>`).join('')}</div>
+  ${list.length?`<div class="car" role="listbox" aria-label="Cuentos">${list.map(x=>{const p=D.prog[x.id];return `<button class="card ${x.id==st.sel?'sel':''}" role="option" aria-selected="${x.id==st.sel}" data-a="pick" data-id="${x.id}"><div class="cov" style="background:${x.c}">${x.e}</div><b>${x.t}</b><small>${x.cat}, ${x.min} min</small><span class="bd ${p?'done':''}">${p?stars(p):LV[x.lvl]}</span></button>`}).join('')}</div>
+  <p class="det"><b>${c.t}</b><br>Nivel ${LV[c.lvl]}. Misión: ${c.q.length} retos de lectura. ${D.prog[c.id]?'¡Mejora tus estrellas!':'¡Aún no lo has leído!'}</p><button class="go" data-a="read">Empezar misión</button>`:'<p class="det" style="margin-top:14px">No hay cuentos con esos filtros. Prueba con otra dificultad o categoría.</p>'}</div>${tabs()}`;
+ }else if(st.v=='read'){
+  const pg=s.p[st.p],last=st.p==s.p.length-1;
+  h=`${bar(s.p.length,st.p)}<button class="x" data-a="fs" data-v="-2" aria-label="Letra más pequeña">A-</button><button class="x" data-a="fs" data-v="2" aria-label="Letra más grande">A+</button></div>
+  <div class="page"><div class="ill pop">${pg.i}</div><p class="txt">${pg.x.split(' ').map(w=>`<span class="w" data-a="w">${w}</span>`).join(' ')}</p></div>
+  <div class="row">${D.set.voz?'<button class="go alt" data-a="listen">🔊 Escuchar</button>':''}</div>
+  <div class="row" style="padding-top:0">${st.p?'<button class="go alt" data-a="prev">Atrás</button>':''}<button class="go" data-a="${last||st.back?'quiz':'next'}">${st.back?'Volver al reto':last?'¡A la misión!':'Siguiente'}</button></div>`;
+ }else if(st.v=='quiz'){
+  const q=s.q[st.qi],ok=st.ans!=null,sec=q.k=='sec',sh=sec?[1,2,0]:[0,1,2];
+  h=`${bar(s.q.length,st.qi)}</div><div class="page"><span class="tag">${AR[q.k]}</span><p class="q">${q.q}</p>
+  ${sh.map(i=>sec?`<button class="opt ${st.ord.includes(i)?'pk':''}" data-a="opt" data-i="${i}">${st.ord.includes(i)?(st.ord.indexOf(i)+1)+'. ':''}${q.o[i]}</button>`:`<button class="opt ${ok&&i==q.a?'ok':''} ${st.bad.includes(i)?'no':''}" data-a="opt" data-i="${i}">${q.o[i]}</button>`).join('')}
+  <p class="fb">${ok?'🦉 ¡Muy bien!':st.bad.length?'🦉 Casi. Relee la página '+q.h+' y prueba otra vez.':'🦉 Tú puedes.'}</p></div>
+  <div class="row">${st.bad.length&&!ok?`<button class="go alt" data-a="rer">Releer página ${q.h}</button>`:''}${ok?`<button class="go" data-a="nq">${st.qi==s.q.length-1?'Ver mi premio':'Siguiente'}</button>`:''}</div>`;
+ }else if(st.v=='end'){
+  const n=D.prog[s.id];
+  h=`<div class="page" style="margin-top:18px"><div class="ill pop">${s.e}</div><h1>¡Misión cumplida!</h1><div class="big pop">${stars(n)}</div><p class="txt" style="font-size:19px">${st.res.filter(Boolean).length} de ${s.q.length} a la primera.</p>
+  ${s.q.map((q,i)=>`<p class="res">${st.res[i]?'✓':'↻'} <b>${AR[q.k]}</b>: ${q.e}</p>`).join('')}</div>
+  <div class="row"><button class="go alt" data-a="read0">Leer otra vez</button><button class="go" data-a="go" data-v="lib">Más cuentos</button></div>`;
+ }else if(st.v=='prog'){
+  const done=Object.keys(D.prog).length,t=total(),B=[['🥉','Primera aventura',done>=1],['🥈','6 estrellas',t>=6],['🥇','Todos los cuentos',done==S.length]];
+  h=`<div class="scr"><h2>⭐ Mi progreso</h2><p class="sub">${done} de ${S.length} cuentos · ${t} estrellas</p>
+  <h2 style="font-size:18px">Lo que voy aprendiendo</h2>${Object.keys(AR).map(k=>{const a=D.ar[k]||{ok:0,tot:0},p=a.tot?Math.round(a.ok/a.tot*100):0;return `<div class="mini"><b>${AR[k]}</b> ${a.tot?p+'%':'sin datos'}<div class="meter"><i style="width:${p}%"></i></div></div>`}).join('')}
+  <h2 style="font-size:18px">Insignias</h2><div class="chips">${B.map(([i,n,o])=>`<span class="chip ${o?'on':''}">${o?i:'🔒'} ${n}</span>`).join('')}</div>
+  <h2 style="font-size:18px">Mis cuentos</h2>${S.map(x=>`<p class="mini">${x.e} ${x.t}: ${D.prog[x.id]?stars(D.prog[x.id]):'pendiente'}</p>`).join('')}</div>${tabs()}`;
+ }else{
+  h=`<div class="scr"><h2>⚙️ Ajustes</h2>
+  <div class="sw">Tamaño de letra<span><button data-a="fs" data-v="-2">A-</button> <button data-a="fs" data-v="2">A+</button></span></div>
+  <p class="mini txt" style="font-size:var(--fs)">Así se verá el texto.</p>
+  <div class="sw">Voz del dispositivo<button class="${D.set.voz?'on':''}" data-a="tg" data-v="voz">${D.set.voz?'Sí':'No'}</button></div>
+  <div class="sw">Modo oscuro<button class="${D.set.dark?'on':''}" data-a="tg" data-v="dark">${D.set.dark?'Sí':'No'}</button></div>
+  <div class="sw">Borrar mi progreso<button data-a="reset">Borrar</button></div></div>${tabs()}`;
+ }
+ const sl=(A.querySelector('.car')||{}).scrollLeft||0;
+ A.innerHTML=h;const c=A.querySelector('.car');if(c)c.scrollLeft=sl;
+}
+function done(q){const a=D.ar[q.k]=D.ar[q.k]||{ok:0,tot:0};a.tot++;const f=!st.bad.length;if(f)a.ok++;st.res[st.qi]=f}
+A.onclick=e=>{
+ const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a,v=b.dataset.v,s=cur();
+ if(a=='w'){say(b.textContent.replace(/[.,:;¡!¿?]/g,''));b.classList.add('hl');setTimeout(()=>b.classList.remove('hl'),700);return}
+ if(a=='listen'){say(s.p[st.p].x);return}
+ if(a=='go'){st.v=v;try{speechSynthesis.cancel()}catch(x){}}
+ else if(a=='f')st.f=+v;
+ else if(a=='c')st.c=v;
+ else if(a=='pick')st.sel=b.dataset.id;
+ else if(a=='read'||a=='read0'){st.v='read';st.p=0;st.back=0}
+ else if(a=='next')st.p++;
+ else if(a=='prev')st.p--;
+ else if(a=='fs'){D.set.fs=Math.min(30,Math.max(18,D.set.fs+ +v));save();theme()}
+ else if(a=='tg'){D.set[v]=D.set[v]?0:1;save();theme()}
+ else if(a=='reset'){if(confirm('¿Borrar todo tu progreso?')){D.prog={};D.ar={};save()}}
+ else if(a=='quiz'){st.v='quiz';if(st.back)st.back=0;else{st.qi=0;st.ans=null;st.bad=[];st.ord=[];st.res=[]}}
+ else if(a=='rer'){st.v='read';st.p=s.q[st.qi].h-1;st.back=1}
+ else if(a=='opt'){const q=s.q[st.qi],i=+b.dataset.i;if(st.ans!=null)return;
+  if(q.k=='sec'){if(i==st.ord.length){st.ord.push(i);if(st.ord.length==q.o.length){st.ans=1;done(q)}}else if(!st.ord.includes(i))st.bad.push(i)}
+  else if(i==q.a){st.ans=i;done(q)}else if(!st.bad.includes(i))st.bad.push(i)}
+ else if(a=='nq'){if(st.qi<s.q.length-1){st.qi++;st.ans=null;st.bad=[];st.ord=[]}else{const f=st.res.filter(Boolean).length,r=f/s.q.length,n=r==1?3:r>=.5?2:1;D.prog[s.id]=Math.max(D.prog[s.id]||0,n);save();st.v='end'}}
+ render();
+};
+theme();render();
+</script>
+</body>
+</html>
